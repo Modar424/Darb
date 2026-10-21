@@ -1,0 +1,19 @@
+import type { Metadata } from 'next';
+import { Suspense } from 'react';
+import { getT } from '@/i18n/server';
+import { RequireRole } from '@/components/layout/require-role';
+import { AdminUsers } from '@/features/admin/users';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+  return { title: t('admin.usersTitle'), robots: { index: false } };
+}
+export default function Page() {
+  return (
+    <RequireRole roles={['ADMIN']}>
+      <Suspense>
+        <AdminUsers />
+      </Suspense>
+    </RequireRole>
+  );
+}

@@ -1,0 +1,3457 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "HealthController_live",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Liveness: process is up.",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/v1/health/ready": {
+      "get": {
+        "operationId": "HealthController_ready",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Readiness: database reachable within 2s.",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Register a new student account and start a session",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Log in; sets HttpOnly session cookie and returns the CSRF token",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "AuthController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "summary": "Current user; also returns the CSRF token to send as X-CSRF-Token",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/forgot-password": {
+      "post": {
+        "operationId": "AuthController_forgot",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": ""
+          }
+        },
+        "summary": "Request a password reset e-mail (always responds identically)",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/reset-password": {
+      "post": {
+        "operationId": "AuthController_reset",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/change-password": {
+      "post": {
+        "operationId": "AuthController_change",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "operationId": "UsersController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      },
+      "patch": {
+        "operationId": "UsersController_update",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/courses": {
+      "get": {
+        "operationId": "CoursesController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "level",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "BEGINNER",
+                "INTERMEDIATE",
+                "ADVANCED"
+              ]
+            }
+          },
+          {
+            "name": "language",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ar",
+                "en"
+              ]
+            }
+          },
+          {
+            "name": "instructorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Public catalogue of published courses (search, filter, paginate)",
+        "tags": [
+          "Courses"
+        ]
+      },
+      "post": {
+        "operationId": "CoursesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCourseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/v1/courses/mine": {
+      "get": {
+        "operationId": "CoursesController_mine",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "summary": "Courses owned by the current instructor (all statuses)",
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/v1/courses/by-slug/{slug}": {
+      "get": {
+        "operationId": "CoursesController_bySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/v1/courses/{id}": {
+      "get": {
+        "operationId": "CoursesController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      },
+      "patch": {
+        "operationId": "CoursesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCourseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      },
+      "delete": {
+        "operationId": "CoursesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/v1/courses/{id}/curriculum": {
+      "get": {
+        "operationId": "CoursesController_curriculum",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/v1/courses/{id}/publish": {
+      "post": {
+        "operationId": "CoursesController_publish",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/v1/courses/{id}/unpublish": {
+      "post": {
+        "operationId": "CoursesController_unpublish",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/v1/courses/{id}/archive": {
+      "post": {
+        "operationId": "CoursesController_archive",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/v1/courses/{courseId}/modules": {
+      "post": {
+        "operationId": "StructureController_createModule",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateModuleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseModule"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Course structure"
+        ]
+      }
+    },
+    "/api/v1/courses/{courseId}/modules/order": {
+      "put": {
+        "operationId": "StructureController_reorderModules",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReorderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Course structure"
+        ]
+      }
+    },
+    "/api/v1/modules/{id}": {
+      "patch": {
+        "operationId": "StructureController_updateModule",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateModuleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseModule"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Course structure"
+        ]
+      },
+      "delete": {
+        "operationId": "StructureController_removeModule",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Course structure"
+        ]
+      }
+    },
+    "/api/v1/modules/{id}/lessons": {
+      "post": {
+        "operationId": "StructureController_createLesson",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLessonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lesson"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Course structure"
+        ]
+      }
+    },
+    "/api/v1/modules/{id}/lessons/order": {
+      "put": {
+        "operationId": "StructureController_reorderLessons",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReorderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Course structure"
+        ]
+      }
+    },
+    "/api/v1/lessons/{id}": {
+      "get": {
+        "operationId": "StructureController_getLesson",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lesson"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "summary": "Lesson content: managers, enrolled learners, or preview lessons of published courses",
+        "tags": [
+          "Course structure"
+        ]
+      },
+      "patch": {
+        "operationId": "StructureController_updateLesson",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLessonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lesson"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Course structure"
+        ]
+      },
+      "delete": {
+        "operationId": "StructureController_removeLesson",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Course structure"
+        ]
+      }
+    },
+    "/api/v1/lessons/{lessonId}/complete": {
+      "post": {
+        "operationId": "ProgressController_complete",
+        "parameters": [
+          {
+            "name": "lessonId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Progress"
+        ]
+      },
+      "delete": {
+        "operationId": "ProgressController_uncomplete",
+        "parameters": [
+          {
+            "name": "lessonId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Progress"
+        ]
+      }
+    },
+    "/api/v1/progress/me/summary": {
+      "get": {
+        "operationId": "ProgressController_summary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Progress"
+        ]
+      }
+    },
+    "/api/v1/courses/{courseId}/progress": {
+      "get": {
+        "operationId": "ProgressController_mine",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Progress"
+        ]
+      }
+    },
+    "/api/v1/courses/{courseId}/learners/{studentId}/progress": {
+      "get": {
+        "operationId": "ProgressController_learner",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "studentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Progress"
+        ]
+      }
+    },
+    "/api/v1/courses/{courseId}/enroll": {
+      "post": {
+        "operationId": "EnrollmentsController_enroll",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Enrollments"
+        ]
+      },
+      "delete": {
+        "operationId": "EnrollmentsController_drop",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Enrollments"
+        ]
+      }
+    },
+    "/api/v1/enrollments/me": {
+      "get": {
+        "operationId": "EnrollmentsController_mine",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Enrollments"
+        ]
+      }
+    },
+    "/api/v1/courses/{courseId}/learners": {
+      "get": {
+        "operationId": "EnrollmentsController_learners",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Enrollments"
+        ]
+      }
+    },
+    "/api/v1/courses/{courseId}/assessments": {
+      "post": {
+        "operationId": "AssessmentsController_create",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssessmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      },
+      "get": {
+        "operationId": "AssessmentsController_list",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/api/v1/assessments/{id}": {
+      "get": {
+        "operationId": "AssessmentsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "summary": "Staff: full definition incl. answer key. Learners: metadata only.",
+        "tags": [
+          "Assessments"
+        ]
+      },
+      "patch": {
+        "operationId": "AssessmentsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAssessmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      },
+      "delete": {
+        "operationId": "AssessmentsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/api/v1/assessments/{id}/publish": {
+      "post": {
+        "operationId": "AssessmentsController_publish",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/api/v1/assessments/{id}/unpublish": {
+      "post": {
+        "operationId": "AssessmentsController_unpublish",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/api/v1/assessments/{id}/questions": {
+      "post": {
+        "operationId": "AssessmentsController_addQuestion",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQuestionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/api/v1/questions/{id}": {
+      "patch": {
+        "operationId": "AssessmentsController_updateQuestion",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQuestionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Question"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      },
+      "delete": {
+        "operationId": "AssessmentsController_removeQuestion",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/api/v1/assessments/{id}/attempts": {
+      "post": {
+        "operationId": "AssessmentsController_start",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "summary": "Start (or resume) an attempt; questions are returned without the answer key",
+        "tags": [
+          "Assessments"
+        ]
+      },
+      "get": {
+        "operationId": "AssessmentsController_listAttempts",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/api/v1/attempts/{id}": {
+      "get": {
+        "operationId": "AssessmentsController_getAttempt",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/api/v1/attempts/{id}/submit": {
+      "post": {
+        "operationId": "AssessmentsController_submit",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitAttemptDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assessments"
+        ]
+      }
+    },
+    "/api/v1/courses/{courseId}/assignments": {
+      "post": {
+        "operationId": "AssignmentsController_create",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssignmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      },
+      "get": {
+        "operationId": "AssignmentsController_list",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      }
+    },
+    "/api/v1/assignments/{id}": {
+      "get": {
+        "operationId": "AssignmentsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      },
+      "patch": {
+        "operationId": "AssignmentsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAssignmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      },
+      "delete": {
+        "operationId": "AssignmentsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      }
+    },
+    "/api/v1/assignments/{id}/publish": {
+      "post": {
+        "operationId": "AssignmentsController_publish",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      }
+    },
+    "/api/v1/assignments/{id}/unpublish": {
+      "post": {
+        "operationId": "AssignmentsController_unpublish",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      }
+    },
+    "/api/v1/assignments/{id}/submission": {
+      "put": {
+        "operationId": "AssignmentsController_submit",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitAssignmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      }
+    },
+    "/api/v1/assignments/{id}/submissions": {
+      "get": {
+        "operationId": "AssignmentsController_listSubmissions",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SUBMITTED",
+                "GRADED"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      }
+    },
+    "/api/v1/submissions/{id}": {
+      "get": {
+        "operationId": "AssignmentsController_getSubmission",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      }
+    },
+    "/api/v1/submissions/{id}/grade": {
+      "put": {
+        "operationId": "AssignmentsController_grade",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GradeSubmissionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Assignments"
+        ]
+      }
+    },
+    "/api/v1/admin/users": {
+      "get": {
+        "operationId": "AdminController_listUsers",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ADMIN",
+                "INSTRUCTOR",
+                "STUDENT"
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ACTIVE",
+                "SUSPENDED"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "operationId": "AdminController_createUser",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminCreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/users/{id}": {
+      "get": {
+        "operationId": "AdminController_getUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminController_updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminUpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/courses": {
+      "get": {
+        "operationId": "AdminController_listCourses",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "DRAFT",
+                "PUBLISHED",
+                "ARCHIVED"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/stats": {
+      "get": {
+        "operationId": "AdminController_stats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/audit-logs": {
+      "get": {
+        "operationId": "AdminController_auditLogs",
+        "parameters": [
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 80,
+              "type": "string"
+            }
+          },
+          {
+            "name": "actorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "entityType",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 60,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "cookie": []
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "LMS API",
+    "description": "Cookie session auth. Send the CSRF token (from login or GET /auth/me) as `X-CSRF-Token` on state-changing requests.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "cookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "lms_sid"
+      },
+      "csrf": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-CSRF-Token"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 120
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "ar",
+              "en"
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "fullName"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "ForgotPasswordDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ResetPasswordDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 128
+          },
+          "newPassword": {
+            "type": "string",
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "token",
+          "newPassword"
+        ]
+      },
+      "ChangePasswordDto": {
+        "type": "object",
+        "properties": {
+          "currentPassword": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "newPassword": {
+            "type": "string",
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "currentPassword",
+          "newPassword"
+        ]
+      },
+      "UpdateProfileDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 120
+          },
+          "bio": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "ar",
+              "en"
+            ]
+          }
+        }
+      },
+      "CreateCourseDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 160
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "BEGINNER",
+              "INTERMEDIATE",
+              "ADVANCED"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "ar",
+              "en"
+            ]
+          },
+          "instructorId": {
+            "type": "string",
+            "description": "Admin only: create the course on behalf of an instructor.",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "title",
+          "summary",
+          "description"
+        ]
+      },
+      "UpdateCourseDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 160
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "BEGINNER",
+              "INTERMEDIATE",
+              "ADVANCED"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "ar",
+              "en"
+            ]
+          }
+        }
+      },
+      "CreateModuleDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "INSTRUCTOR",
+              "STUDENT"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "passwordHash": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "locale": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "SUSPENDED"
+            ]
+          },
+          "failedLoginCount": {
+            "type": "number"
+          },
+          "lockedUntil": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "lastLoginAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "passwordChangedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "passwordHash",
+          "fullName",
+          "bio",
+          "locale",
+          "status",
+          "failedLoginCount",
+          "lockedUntil",
+          "lastLoginAt",
+          "passwordChangedAt",
+          "roles",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "Lesson": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "moduleId": {
+            "type": "string"
+          },
+          "module": {
+            "$ref": "#/components/schemas/CourseModule"
+          },
+          "courseId": {
+            "type": "string",
+            "description": "Denormalised from the module to keep access checks and progress queries cheap."
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course"
+          },
+          "title": {
+            "type": "string"
+          },
+          "contentType": {
+            "enum": [
+              "TEXT",
+              "VIDEO",
+              "LINK"
+            ],
+            "type": "string"
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "contentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "durationMinutes": {
+            "type": "number"
+          },
+          "isPreview": {
+            "type": "boolean"
+          },
+          "position": {
+            "type": "number"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "moduleId",
+          "module",
+          "courseId",
+          "course",
+          "title",
+          "contentType",
+          "content",
+          "contentUrl",
+          "durationMinutes",
+          "isPreview",
+          "position",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CourseModule": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "courseId": {
+            "type": "string"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "number"
+          },
+          "lessons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Lesson"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "courseId",
+          "course",
+          "title",
+          "description",
+          "position",
+          "lessons",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "Course": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "BEGINNER",
+              "INTERMEDIATE",
+              "ADVANCED"
+            ]
+          },
+          "language": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "PUBLISHED",
+              "ARCHIVED"
+            ]
+          },
+          "instructorId": {
+            "type": "string"
+          },
+          "instructor": {
+            "$ref": "#/components/schemas/User"
+          },
+          "modules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CourseModule"
+            }
+          },
+          "publishedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "slug",
+          "summary",
+          "description",
+          "level",
+          "language",
+          "status",
+          "instructorId",
+          "instructor",
+          "modules",
+          "publishedAt",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ReorderDto": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "minItems": 1,
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "ids"
+        ]
+      },
+      "UpdateModuleDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        }
+      },
+      "CreateLessonDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 160
+          },
+          "contentType": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "VIDEO",
+              "LINK"
+            ]
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 50000
+          },
+          "contentUrl": {
+            "type": "string",
+            "maxLength": 500,
+            "format": "uri"
+          },
+          "durationMinutes": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "isPreview": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "UpdateLessonDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 160
+          },
+          "contentType": {
+            "enum": [
+              "TEXT",
+              "VIDEO",
+              "LINK"
+            ],
+            "type": "string"
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 50000
+          },
+          "contentUrl": {
+            "type": "string",
+            "maxLength": 500,
+            "format": "uri"
+          },
+          "durationMinutes": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "isPreview": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateAssessmentDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 160
+          },
+          "instructions": {
+            "type": "string",
+            "maxLength": 5000
+          },
+          "moduleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "timeLimitMinutes": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 600
+          },
+          "maxAttempts": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "passingPercent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "availableFrom": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "dueAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "reviewPolicy": {
+            "type": "string",
+            "enum": [
+              "AFTER_SUBMISSION",
+              "NEVER"
+            ]
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "UpdateAssessmentDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 160
+          },
+          "instructions": {
+            "type": "string",
+            "maxLength": 5000
+          },
+          "moduleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "timeLimitMinutes": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 600
+          },
+          "maxAttempts": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "passingPercent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "availableFrom": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "dueAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "reviewPolicy": {
+            "enum": [
+              "AFTER_SUBMISSION",
+              "NEVER"
+            ],
+            "type": "string"
+          }
+        }
+      },
+      "OptionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,40}$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "id",
+          "text"
+        ]
+      },
+      "CreateQuestionDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SINGLE_CHOICE",
+              "MULTIPLE_CHOICE",
+              "TRUE_FALSE"
+            ]
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "options": {
+            "minItems": 2,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionDto"
+            }
+          },
+          "correctOptionIds": {
+            "minItems": 1,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            }
+          },
+          "points": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "explanation": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "type",
+          "prompt",
+          "options",
+          "correctOptionIds"
+        ]
+      },
+      "UpdateQuestionDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "enum": [
+              "SINGLE_CHOICE",
+              "MULTIPLE_CHOICE",
+              "TRUE_FALSE"
+            ],
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "options": {
+            "minItems": 2,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionDto"
+            }
+          },
+          "correctOptionIds": {
+            "minItems": 1,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            }
+          },
+          "points": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "explanation": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        }
+      },
+      "Question": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "assessmentId": {
+            "type": "string"
+          },
+          "assessment": {
+            "$ref": "#/components/schemas/Assessment"
+          },
+          "type": {
+            "enum": [
+              "SINGLE_CHOICE",
+              "MULTIPLE_CHOICE",
+              "TRUE_FALSE"
+            ],
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "correctOptionIds": {
+            "description": "Option ids that make the answer correct. NEVER serialised to students before review is permitted.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "explanation": {
+            "type": "string",
+            "nullable": true
+          },
+          "points": {
+            "type": "number"
+          },
+          "position": {
+            "type": "number"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "assessmentId",
+          "assessment",
+          "type",
+          "prompt",
+          "options",
+          "correctOptionIds",
+          "explanation",
+          "points",
+          "position",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "Assessment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "courseId": {
+            "type": "string"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course"
+          },
+          "moduleId": {
+            "type": "string",
+            "nullable": true
+          },
+          "module": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CourseModule"
+              }
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "instructions": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "PUBLISHED"
+            ]
+          },
+          "timeLimitMinutes": {
+            "type": "number",
+            "nullable": true
+          },
+          "maxAttempts": {
+            "type": "number"
+          },
+          "passingPercent": {
+            "type": "number"
+          },
+          "availableFrom": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "dueAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "reviewPolicy": {
+            "type": "string",
+            "enum": [
+              "AFTER_SUBMISSION",
+              "NEVER"
+            ]
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Question"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "courseId",
+          "course",
+          "moduleId",
+          "module",
+          "title",
+          "instructions",
+          "status",
+          "timeLimitMinutes",
+          "maxAttempts",
+          "passingPercent",
+          "availableFrom",
+          "dueAt",
+          "reviewPolicy",
+          "questions",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "SubmitAttemptDto": {
+        "type": "object",
+        "properties": {
+          "answers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Map of questionId -> selected option ids."
+          }
+        },
+        "required": [
+          "answers"
+        ]
+      },
+      "CreateAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 160
+          },
+          "instructions": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000
+          },
+          "moduleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "maxPoints": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 1000
+          },
+          "dueAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "allowLate": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title",
+          "instructions"
+        ]
+      },
+      "UpdateAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 160
+          },
+          "instructions": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000
+          },
+          "moduleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "maxPoints": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 1000
+          },
+          "dueAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "allowLate": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SubmitAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "linkUrl": {
+            "type": "string",
+            "maxLength": 500,
+            "format": "uri"
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "GradeSubmissionDto": {
+        "type": "object",
+        "properties": {
+          "grade": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "feedback": {
+            "type": "string",
+            "maxLength": 5000
+          }
+        },
+        "required": [
+          "grade"
+        ]
+      },
+      "AdminCreateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 120
+          },
+          "roles": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "enum": [
+                "ADMIN",
+                "INSTRUCTOR",
+                "STUDENT"
+              ]
+            }
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "fullName",
+          "roles"
+        ]
+      },
+      "AdminUpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 120
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "SUSPENDED"
+            ]
+          },
+          "roles": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "enum": [
+                "ADMIN",
+                "INSTRUCTOR",
+                "STUDENT"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

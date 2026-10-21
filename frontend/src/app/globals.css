@@ -1,0 +1,206 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/noto-kufi-arabic';
+@import '@fontsource/ibm-plex-sans-arabic/400.css';
+@import '@fontsource/ibm-plex-sans-arabic/500.css';
+@import '@fontsource/ibm-plex-sans-arabic/600.css';
+
+/* Design tokens. Ink (deep blue) carries structure, saffron marks the one thing to act on. */
+@theme {
+  --color-ink-950: #0b1d30;
+  --color-ink-900: #0f2a43;
+  --color-ink-800: #17395a;
+  --color-ink-700: #24507a;
+  --color-ink-600: #356b9c;
+  --color-ink-200: #c9d9e8;
+  --color-ink-100: #e3ecf4;
+  --color-ink-50: #f1f5f9;
+  --color-paper: #f6f8fa;
+  --color-surface: #ffffff;
+  --color-line: #d8e0e8;
+  --color-text: #1b2836;
+  --color-muted: #52617a;
+  --color-saffron-500: #f2a900;
+  --color-saffron-600: #c98a00;
+  --color-saffron-100: #fdf0cc;
+  --color-teal-700: #0b6b6a;
+  --color-teal-100: #d6efee;
+  --color-danger-700: #a82b25;
+  --color-danger-100: #fbe3e1;
+  --color-warn-800: #8a5a00;
+  --color-warn-100: #fdf0cc;
+
+  --font-display: 'Noto Kufi Arabic Variable', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius-control: 0.5rem;
+  --radius-panel: 0.875rem;
+  --shadow-panel: 0 1px 2px rgb(15 42 67 / 0.06), 0 4px 16px rgb(15 42 67 / 0.05);
+  --shadow-pop: 0 12px 40px rgb(15 42 67 / 0.22);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+:root {
+  color-scheme: light;
+}
+html {
+  background: var(--color-paper);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  min-height: 100dvh;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  line-height: 1.35;
+  color: var(--color-ink-900);
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+
+/* ---- Dark theme: tokens + the few light-tint utilities. Brand-dark panels (bg-ink-900) stay as they are. ---- */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-paper: #0a141e;
+  --color-surface: #111f2d;
+  --color-line: #2a3f55;
+  --color-text: #e4ecf4;
+  --color-muted: #a3b3c6;
+  --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.3);
+}
+:root[data-theme='dark'] :is(h1, h2, h3, h4),
+:root[data-theme='dark'] .text-ink-900 {
+  color: #e4ecf4;
+}
+:root[data-theme='dark'] .text-ink-800 {
+  color: #d3e0ed;
+}
+:root[data-theme='dark'] .text-ink-700 {
+  color: #bbcfe2;
+}
+:root[data-theme='dark'] .text-ink-600 {
+  color: #a3bdd6;
+}
+:root[data-theme='dark'] .bg-ink-50,
+:root[data-theme='dark'] .hover\:bg-ink-50:hover {
+  background-color: #162637;
+}
+:root[data-theme='dark'] .bg-ink-100,
+:root[data-theme='dark'] .hover\:bg-ink-100:hover {
+  background-color: #1d3248;
+}
+:root[data-theme='dark'] .border-ink-200 {
+  border-color: var(--color-line);
+}
+:root[data-theme='dark'] .bg-teal-100 {
+  background-color: #0e3a3a;
+}
+:root[data-theme='dark'] .text-teal-700 {
+  color: #6fd8d5;
+}
+:root[data-theme='dark'] .bg-danger-100 {
+  background-color: #3f1c1a;
+}
+:root[data-theme='dark'] .text-danger-700 {
+  color: #ff9f98;
+}
+:root[data-theme='dark'] .bg-warn-100 {
+  background-color: #3b2c06;
+}
+:root[data-theme='dark'] .text-warn-800 {
+  color: #f5c866;
+}
+:root[data-theme='dark'] :is(button, a).bg-ink-900 {
+  background-color: var(--color-ink-700);
+}
+:root[data-theme='dark'] :is(button, a).bg-ink-900:hover,
+:root[data-theme='dark'] :is(button, a).hover\:bg-ink-800:hover {
+  background-color: var(--color-ink-600);
+}
+:root[data-theme='dark'] .skeleton {
+  background: linear-gradient(90deg, #162637 25%, #1d3248 50%, #162637 75%);
+  background-size: 200% 100%;
+}
+
+/* Visible keyboard focus everywhere. */
+:focus-visible {
+  outline: 3px solid var(--color-saffron-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Numbers and e-mail addresses stay left-to-right inside RTL text. */
+.ltr-isolate {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  /* long e-mail addresses must wrap instead of pushing the page sideways on phones */
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* Directional icons flip in RTL. */
+[dir='rtl'] .flip-rtl {
+  transform: scaleX(-1);
+}
+
+/* Restrained entrance for dialogs/menus only (answers a user action). */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+dialog[open] {
+  animation: pop-in 160ms var(--ease-out);
+}
+dialog::backdrop {
+  background: rgb(11 29 48 / 0.55);
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-ink-100) 25%,
+    var(--color-ink-50) 50%,
+    var(--color-ink-100) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Long lesson text */
+.prose-lms {
+  max-width: 68ch;
+  font-size: 1.0625rem;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
